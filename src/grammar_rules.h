@@ -47,7 +47,7 @@ RULE(builtin_func) \
 RULE_END \
 \
 RULE(unary_op) \
-	VAR TKN(BITWISE_AND) REDUCE(unary_op) \
+	VAR TKN(AMPERSAND) REDUCE(unary_op) \
 	VAR TKN(MUL_OP) REDUCE(unary_op) \
 	VAR TKN(ADD_OP) REDUCE(unary_op) \
 	VAR TKN(SUB_OP) REDUCE(unary_op) \
@@ -96,7 +96,7 @@ RULE_END \
 \
 RULE(bitwise_and_expr) \
 	VAR SUB(equality_expr) REDUCE_DEFAULT \
-	VAR SUB(bitwise_and_expr) TKN(BITWISE_AND) SUB(equality_expr) REDUCE_TAG(binary_expr, 5) \
+	VAR SUB(bitwise_and_expr) TKN(AMPERSAND) SUB(equality_expr) REDUCE_TAG(binary_expr, 5) \
 RULE_END \
 \
 RULE(bitwise_xor_expr) \

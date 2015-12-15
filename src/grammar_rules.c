@@ -240,7 +240,7 @@ REDUCER(unary_expr_op) {
 
 REDUCER(unary_op) {
 	switch (in->id) {
-		case TKN_BITWISE_AND: out->tag = AST_ADDRESS; break;
+		case TKN_AMPERSAND: out->tag = AST_ADDRESS; break;
 		case TKN_MUL_OP: out->tag = AST_DEREF; break;
 		case TKN_ADD_OP: out->tag = AST_POSITIVE; break;
 		case TKN_SUB_OP: out->tag = AST_NEGATIVE; break;
@@ -360,7 +360,7 @@ REDUCER(binary_expr) {
 		case TKN_GE_OP:       e->binary_op.op = AST_GE; break;
 		case TKN_EQ_OP:       e->binary_op.op = AST_EQ; break;
 		case TKN_NE_OP:       e->binary_op.op = AST_NE; break;
-		case TKN_BITWISE_AND: e->binary_op.op = AST_BITWISE_AND; break;
+		case TKN_AMPERSAND: e->binary_op.op = AST_BITWISE_AND; break;
 		case TKN_BITWISE_XOR: e->binary_op.op = AST_BITWISE_XOR; break;
 		case TKN_BITWISE_OR:  e->binary_op.op = AST_BITWISE_OR; break;
 		case TKN_AND_OP:      e->binary_op.op = AST_AND; break;
