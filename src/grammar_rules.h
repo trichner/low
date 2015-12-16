@@ -8,6 +8,7 @@ RULE(primary_expr) \
 	VAR TKN(STRING_LITERAL) REDUCE(primary_expr_string) \
 	VAR TKN(NUMBER_LITERAL) REDUCE(primary_expr_number) \
 	VAR TKN(LPAREN) SUB(expr) TKN(RPAREN) REDUCE(primary_expr_paren) \
+	/*VAR SUB(type) TKN(LBRACE) SUB(argument_expr_list) TKN(RBRACE) REDUCE(primary_expr_struct)*/ \
 RULE_END \
 \
 RULE(postfix_expr) \

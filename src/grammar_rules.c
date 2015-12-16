@@ -56,6 +56,34 @@ REDUCER(primary_expr_string) {
 }
 
 
+struct struct_literal {
+	type_t type;
+	int num_args;
+	int args;
+};
+
+// VAR SUB(type) TKN(LBRACE) SUB(argument_expr_list) TKN(RBRACE) REDUCE(primary_expr_struct)
+
+REDUCER(primary_expr_struct) {
+	expr_t *e = malloc(sizeof(expr_t));
+	bzero(e, sizeof(*e));
+	e->loc = in->loc;
+
+	// e->struct_literal.type = *(type_t*)in[0].ptr;
+	// free(in[0].ptr);
+
+	// array_t *args = in[2].ptr;
+	// assert(args);
+	// array_shrink(args);
+	// e->struct_literal.num_args = args->size;
+	// e->struct_literal.args = args->items;
+	// free(args);
+
+	e->kind = AST_STRUCT_LITERAL_EXPR;
+	out->ptr = e;
+}
+
+
 static int
 is_number_dec (int c) {
 	return (c >= '0' && c <= '9');
@@ -511,9 +539,6 @@ REDUCER(block_item_stmt) {
 
 
 // --- selection_stmt ----------------------------------------------------------
-
-// VAR TKN(IF) SUB(expr) SUB(compound_stmt) REDUCE_TAG(selection_stmt_if, 0) \
-// VAR TKN(IF) SUB(expr) SUB(compound_stmt) TKN(ELSE) SUB(stmt) REDUCE_TAG(selection_stmt_if, 1) \
 
 REDUCER(selection_stmt_if) {
 	stmt_t *s = malloc(sizeof(stmt_t));
