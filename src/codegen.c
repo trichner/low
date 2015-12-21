@@ -570,16 +570,15 @@ codegen_slice_new(codegen_t *self, codegen_context_t *context, make_builtin_t *m
 
 
 static LLVMValueRef
-codegen_slice_append(codegen_t *self, codegen_context_t *context, LLVMValueRef sliceptr, *expr_t element){
+codegen_slice_append(codegen_t *self, codegen_context_t *context, LLVMValueRef sliceptr, expr_t *element){
 	assert(self);
 	assert(context);
 	assert(sliceptr);
 
-	LLVMValueRef lenptr = LLVMBuildStructGEP(self->builder,sliceptr,1);
+	LLVMValueRef lenptr = LLVMBuildStructGEP(self->builder,sliceptr,1,"");
 	LLVMValueRef len = LLVMBuildLoad(self->builder,lenptr,"");
-	LLVMValueRef capptr = LLVMBuildStructGEP(self->builder,sliceptr,2);
+	LLVMValueRef capptr = LLVMBuildStructGEP(self->builder,sliceptr,2,"");
 	LLVMValueRef cap = LLVMBuildLoad(self->builder,capptr,"");
-
 
 	// realloc?
 	context_t subctx;
@@ -594,14 +593,28 @@ codegen_slice_append(codegen_t *self, codegen_context_t *context, LLVMValueRef s
 
 	LLVMPositionBuilderAtEnd(self->builder, true_block);
 
+	// IF
+
 	// REALLOC HERE (or malloc and copy)
+
+	//declare void @llvm.memcpy.p0i8.p0i8.i32(i8* <dest>, i8* <src>, i32 <len>, i32 <align>, i1 <isvolatile>)
+
+	LLVMTypeRef element_type;
+	LLVMTypeRef types[] = {element_type,element_type}
+	LLVMValueRef fn = LLVMGetIntrinsicByID(self->module,LLVMIntrinsicIDMemset,0,0);
+
+	assert(fn && "Intrinsic function not found!");
+
+	LLVMBuildCall(self->builder,fn,0,0,"");
+
+	// ENDIF
 
 	LLVMPositionBuilderAtEnd(self->builder, exit_block);
 	codegen_context_dispose(&subctx);
 
 	// insert new element
 
-	return slice;
+	return sliceptr;
 }
 
 static LLVMValueRef

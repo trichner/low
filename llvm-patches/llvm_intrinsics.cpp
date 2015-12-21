@@ -8,6 +8,11 @@
 
 const LLVMIntrinsicID LLVMIntrinsicIDTrap = llvm::Intrinsic::trap;
 
+const LLVMIntrinsicID LLVMIntrinsicIDMemset = llvm::Intrinsic::memset;
+const LLVMIntrinsicID LLVMIntrinsicIDMemmove = llvm::Intrinsic::memmove;
+const LLVMIntrinsicID LLVMIntrinsicIDMemcpy = llvm::Intrinsic::memcpy;
+
+
 /*
  * The Tys parameter is for intrinsics with overloaded types (e.g., those using iAny, fAny, vAny, or iPTRAny).
  * For a declaration of an overloaded intrinsic, Tys must provide exactly one type for each overloaded type in the intrinsic.
