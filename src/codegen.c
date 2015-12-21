@@ -568,6 +568,42 @@ codegen_slice_new(codegen_t *self, codegen_context_t *context, make_builtin_t *m
 	return slice;
 }
 
+
+static LLVMValueRef
+codegen_slice_append(codegen_t *self, codegen_context_t *context, LLVMValueRef sliceptr, *expr_t element){
+	assert(self);
+	assert(context);
+	assert(sliceptr);
+
+	LLVMValueRef lenptr = LLVMBuildStructGEP(self->builder,sliceptr,1);
+	LLVMValueRef len = LLVMBuildLoad(self->builder,lenptr,"");
+	LLVMValueRef capptr = LLVMBuildStructGEP(self->builder,sliceptr,2);
+	LLVMValueRef cap = LLVMBuildLoad(self->builder,capptr,"");
+
+
+	// realloc?
+	context_t subctx;
+	codegen_context_init(&subctx);
+	subctx.prev = context;
+	LLVMValueRef cond = LLVMBuildICmp(self->builder,LLVMIntEQ,len,cap,"cond");
+
+	LLVMValueRef func = LLVMGetBasicBlockParent(LLVMGetInsertBlock(self->builder));
+	LLVMBasicBlockRef true_block = LLVMAppendBasicBlock(func, "iftrue");
+	LLVMBasicBlockRef exit_block = LLVMAppendBasicBlock(func, "ifexit");
+	LLVMBuildCondBr(self->builder, cond, true_block, exit_block);
+
+	LLVMPositionBuilderAtEnd(self->builder, true_block);
+
+	// REALLOC HERE (or malloc and copy)
+
+	LLVMPositionBuilderAtEnd(self->builder, exit_block);
+	codegen_context_dispose(&subctx);
+
+	// insert new element
+
+	return slice;
+}
+
 static LLVMValueRef
 codegen_expr (codegen_t *self, codegen_context_t *context, expr_t *expr, char lvalue, type_t *type_hint) {
 	assert(self);
